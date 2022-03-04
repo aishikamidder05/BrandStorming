@@ -24,9 +24,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8hsojq5ck%)*xrapsbc0949ho-4mt#6%(utp!2vqpg&499u&hg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['brandstorming.arhn.co.in', '127.0.0.1']
+
+ALLOWED_HOSTS = ['brandstorming.arhn.co.in','20.198.84.213']
 
 GOOGLE_RECAPTCHA_SITE_KEY = '6Lfed7EeAAAAAI0I_JbftoIi4-bmxBrDTaPaCLVh'
 
@@ -103,24 +104,23 @@ WSGI_APPLICATION = 'inquest.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
- 'default': {
-     'ENGINE': 'django.db.backends.sqlite3',
-     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
- }
-}
-
-# DATABASES = {
-#   'default': {
-#       'ENGINE': 'django.db.backends.postgresql',
-#       'NAME': 'd89ti3h09npn04',
-#       'USER': 'wbweveulquykva',
-#       'PASSWORD': '2346ce895aae72c9a4efb6ddb46372d6472ba1f44e80aa76d7d3070a2db69503',
-#       'HOST': 'ec2-18-235-109-97.compute-1.amazonaws.com',
-#       'PORT': '5432'
-#   }
+#DATABASES = {
+# 'default': {
+#     'ENGINE': 'django.db.backends.sqlite3',
+#     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 # }
+#}
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'brandstorming',
+        'USER': 'admin',
+        'PASSWORD': 'admin@2022',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
