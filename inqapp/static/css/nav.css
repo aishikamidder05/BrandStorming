@@ -11,8 +11,8 @@
   float: left;
   width: auto;
   height: auto;
-  /* padding-left: 3rem; //for aarohan */
-  padding-left: 0rem; //for CCA cell event
+  padding-left: 0rem; 
+  /* padding-left: 0rem; */
 }
 
 .nav div.logo a {
@@ -67,6 +67,9 @@
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
+.logo-mobile{
+  display: none;
+}
 
 /* Media qurey section */
 
@@ -90,6 +93,13 @@
 @media screen and (max-width: 768px) {
   .nav {
     position: fixed;
+  }
+  .nav div.logo {
+    display: none;
+  }
+
+  .logo-mobile {
+    display: block;
   }
 
   .navshow {

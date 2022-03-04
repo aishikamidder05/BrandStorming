@@ -84,6 +84,12 @@
     </div>
   </nav>
 
+  <div class="logo-mobile">
+    <a href="../">
+      <img src="{% static "img/final-logo.png" %}" style="width:100px" />
+    </a>
+  </div>
+
   <div class="container text-center">
     <div class="inq-logo">
       <h1>Brand Storming</h1>
@@ -92,7 +98,7 @@
   </div>
   {%if team.isProductAllocated %}
     <div class="alert alert-success mx-auto" style="width: 400px;text-align: center; font-size: 16px;">
-      Your alloted product is - {{team.product}}
+      Your alloted product is - <b>{{team.product}}</b>
     </div>
   {% else %}
     

@@ -83,8 +83,14 @@
     </div>
   </nav>
 
+  <div class="logo-mobile">
+    <a href="../">
+      <img src="{% static "img/final-logo.png" %}" style="width:100px" />
+    </a>
+  </div>
+
   <div class="container text-center">
-    <div class="inq-logo">
+    <div class="inq-logo">      
       <h1>Brand Storming</h1>
     </div>
     <div class="row infobar">
@@ -92,7 +98,7 @@
         {%if team.isTeamAdded %}
           {%if team.isProductAllocated %}
             <div class="alert alert-success mx-auto" style="width: 400px;text-align: center; font-size: 16px;">
-              Your alloted product is - {{team.product}}
+              Your alloted product is - <b>{{team.product}}</b>
             </div>
           {% else %}
             <div style="width: 100%;text-align: center; padding-bottom: 5vh;">
@@ -132,7 +138,7 @@
             <li> 4) Each team will get 1 minute for presenting. </li>
             <li> 5) The decision of the organizing committee would be final. </li>
           </ul>
-          <span class="login100-form-title p-b-49">
+          <span class="login100-form-title mt-5 p-b-49">
             Guidelines for Presentation
           </span>
           <ul>
