@@ -82,21 +82,6 @@ AUTHENTICATION_BACKENDS = (
  'django.contrib.auth.backends.ModelBackend',
 )
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'home'
-
-LOGOUT_REDIRECT_URL = 'home'
-
-
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_HOST_USER = ''        #write ur email id between ' '
-EMAIL_HOST_PASSWORD = ''              #write ur password here between ' '
-EMAIL_USE_TLS = True
-EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
-
 
 WSGI_APPLICATION = 'inquest.wsgi.application'
 
