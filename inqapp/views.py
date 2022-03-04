@@ -28,7 +28,7 @@ def home(request):
 class TeamDetailView(View):
     def get(self, request):
         if self.request.user.is_anonymous:
-            return redirect('home')
+            return redirect('signin')
         else:
             if TeamDetail.objects.filter(team=request.user).exists():
                 team = TeamDetail.objects.get(team=request.user)
@@ -68,7 +68,7 @@ class TeamDetailView(View):
 
 def question(request):
     if request.user.is_anonymous:
-       return redirect('home')
+       return redirect('signin')
     if TeamDetail.objects.filter(team=request.user).exists():
         questions = Question.objects.all()
         team = TeamDetail.objects.get(team=request.user)
@@ -114,7 +114,7 @@ product_list = [
 
 def productAllot(request):
     if request.user.is_anonymous:
-       return redirect('home')
+       return redirect('signin')
     if TeamDetail.objects.filter(team=request.user).exists():
         index = random.randint(0,29)
         team = TeamDetail.objects.get(team=request.user)

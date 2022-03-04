@@ -5,11 +5,11 @@
 <head>
   <title>BrandStorming</title>
   <meta charset="UTF-8" />
-  <meta name="description" content="Inquest is the online treasure hunt of the official techno-management fest of National
-    Institute of Technology, Durgapur organised by Centre for Cognitive Activities(CCA)" />
+  <meta name="description" content="Brandstorming is an online event of the official techno-management fest of National
+    Institute of Technology, Durgapur organised by Team Aavishkar." />
 
-  <meta name="keywords" content="aarohan, 2020, 2k20, nit, nitd, nitdgp, official techno-management fest,
-    fest, festival, science, engineering, techno-management, durgapur, National Institute of Technology, Durgapur,
+  <meta name="keywords" content="aarohan, 2022, 2k22, nit, nitd, nitdgp, official techno-management fest,
+    fest, festival, science, brand, futuristic, creative, engineering, techno-management, durgapur, National Institute of Technology, Durgapur,
     Centre for Cognitive Activities(CCA), Aarohan is the official techno-management fest of National
     Institute of Technology, Durgapur organised by Centre for Cognitive Activities(CCA), wdct, web, design, creative team,
     coding, development, web development, research and development, e cell, entrepreneurship, R&D, robotics, robo cell,
@@ -94,6 +94,17 @@
       <h1>Brand Storming</h1>
     </div>
     <div class="row infobar">
+      {% if user.is_anonymous %}
+        <div style="width: 100%;text-align: center; padding-bottom: 5vh;">
+          <button class="btn btn-success boton"
+            style="padding:0.7rem 2rem;border:0;margin-top:3vh;min-width: 9vw;background: linear-gradient(90deg, rgb(111, 158, 65) 0%, rgb(73, 111, 23) 100%);">
+            <a href="{% url 'product' %}" style="text-decoration: none;
+              color: white;">
+              <h3 style="margin:0;font-size: 1.5em;">START</h3>
+            </a>
+          </button>
+        </div>
+      {% endif %}
       {% if user.is_authenticated %}
         {%if team.isTeamAdded %}
           {%if team.isProductAllocated %}
@@ -129,14 +140,14 @@
         </span>
         <div>
           <ul>
-            <li> 1) A team can have 1-3 members. </li>
-            <li> 1) One of the team member needs to sign up and can share the username and password with his/her teammates. </li>
-            <li> 3) After sign up you need to update the team details in "My Team" section.</li>
-            <li> 4) Once you update your team details then you can take the product allotment quiz available on the home screen. </li>
-            <li> 2) Product will be assigned to each team on day 1. </li>
-            <li> 3) 24 hrs will be assigned for advertisement preparation. </li>
-            <li> 4) Each team will get 1 minute for presenting. </li>
-            <li> 5) The decision of the organizing committee would be final. </li>
+            <li> 1) A team can have 1-3 members. </li></br>
+            <li> 2) One of the team member needs to sign up and can share the username and password with his/her teammates. </li></br>
+            <li> 3) After sign up you need to update the team details in "My Team" section.</li></br>
+            <li> 4) Once you update your team details then you can take the product allotment quiz available on the home screen. </li></br>
+            <li> 5) Product will be assigned to each team on day 1. </li></br>
+            <li> 6) 24 hrs will be assigned for advertisement preparation. </li></br>
+            <li> 7) Each team will get 1 minute for presenting. </li></br>
+            <li> 8) The decision of the organizing committee would be final. </li>
           </ul>
           <span class="login100-form-title mt-5 p-b-49">
             Guidelines for Presentation
