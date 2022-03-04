@@ -67,8 +67,9 @@
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
 }
-.logo-mobile{
-  display: none;
+
+.logo-mobile {
+  display: block;
 }
 
 /* Media qurey section */
@@ -96,10 +97,6 @@
   }
   .nav div.logo {
     display: none;
-  }
-
-  .logo-mobile {
-    display: block;
   }
 
   .navshow {
