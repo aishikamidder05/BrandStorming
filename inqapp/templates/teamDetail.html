@@ -3,8 +3,8 @@
 
 <head>
   <title>Team | BrandStorming</title>
-  <meta name="description" content="Inquest is the online treasure hunt of the official techno-management fest of National
-  Institute of Technology, Durgapur" />
+  <meta name="description" content="Brandstorming is an online event of the official techno-management fest of National
+    Institute of Technology, Durgapur organised by Team Aavishkar." />
   {% load static %}
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -80,13 +80,19 @@
     </div>
   </nav>
 
+  <div class="logo-mobile">
+    <a href="../">
+      <img src="{% static "img/final-logo.png" %}" style="width:100px" />
+    </a>
+  </div>
+
   <div class="limiter">
     <div class="container-login100">
       <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54" style="width: 500px;">
 
         {% if team.isTeamAdded %}
           <span class="login100-form-title p-b-49">
-            Your team is updated.
+            Your Team is Updated
           </span>
           <div>
             <ul>

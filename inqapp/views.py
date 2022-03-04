@@ -13,6 +13,7 @@ from django.conf import settings
 from django.utils import timezone
 import datetime
 import requests
+import random
 from django.utils.timezone import utc
 
 def home(request):
@@ -27,7 +28,7 @@ def home(request):
 class TeamDetailView(View):
     def get(self, request):
         if self.request.user.is_anonymous:
-            return redirect('home')
+            return redirect('signin')
         else:
             if TeamDetail.objects.filter(team=request.user).exists():
                 team = TeamDetail.objects.get(team=request.user)
@@ -67,7 +68,7 @@ class TeamDetailView(View):
 
 def question(request):
     if request.user.is_anonymous:
-       return redirect('home')
+       return redirect('signin')
     if TeamDetail.objects.filter(team=request.user).exists():
         questions = Question.objects.all()
         team = TeamDetail.objects.get(team=request.user)
@@ -78,12 +79,46 @@ def question(request):
 def contact(request):
     return render(request,'contact.html')
 
+product_list = [
+    "Flying car: car which can fly",
+    "Smart glass: goggles that can store information and can display things",
+    "Smart brush:  toothbrush that is automatic and adjusts itself with respect to age, remind user to brush in time",
+    "Flying surfboard: can surf on air",
+    "Flying broom: broom that can be used in 'Quidditch'",
+    "Wireless charger: can charge any electronic device from a distance without wire",
+    "Smart water bottle:  bottle that can inform about any liquid inside it and purify or change temp. accordingly",
+    "Smart bed: adjusts itself with the sleeping posture and helps to make the correct",
+    "Flying saucer: object to travel in space",
+    "Smart pen : store information and record things also",
+    "Mobile Music: Carry your favorite playlist on your wrist.",
+    "Garden online: Transmit plant’s data to your computer so that you can see just what your plant needs.",
+    "Cloud Sofa: Floating sofa- Bring heaven home",
+    "The Neuralizer:  this gadget lets you zap away the memories of those who stare at the flashing red light",
+    "The Lightsaber: an elegant weapon from a more civilized age",
+    "The Electronic Thumb: hitch a ride with an alien",
+    "Portable Lamp: Lamp that can also be carried like a torch",
+    "PC Projector: Computer, keyboard, and projector all in one device.",
+    "Hologram shield: A shield which is simply a frame and uses a hologram to protect",
+    "Smart torch : torch with light regulator", 
+    "Mr. Fusion- generate all our power needs just by feeding in some garbage.",
+    "Iron Mans Armor- It can fly, it's impervious to most forms of damage and it features repulsor beams that can blast holes in masonry",
+    "Time Machine- Hop into your handy-dandy time machine and risk introducing a paradox that could rip apart the very fabric of time and space in order to prevent yourself from an embarrassing situation",
+    "The Transporter- The device that could dematerialize you, shoot you across vast distances and reassemble you at your destination",
+    "The Replicator-  It can create stuff as long as it knows what that stuff is made of on a molecular level",
+    "The Sonic Screwdriver- It can open (or engage) locks ranging from rusty old padlocks to digital keypads. It can reprogram computers and repair old wiring. In a pinch, you can use it as a weapon and knock people unconscious with it or pair it with a power source to zap Daleks or Cybermen",
+    "Anywhere door: can go anywhere by opening the door",
+    "Spyglass: Binoculars that can see through opaque objects",
+    "3D Projector: Design on a drawing book and project a 3D image",
+    "Catch Gloves: Gloves that makes sure you always catch the ball"
+]
+
 def productAllot(request):
     if request.user.is_anonymous:
-       return redirect('home')
+       return redirect('signin')
     if TeamDetail.objects.filter(team=request.user).exists():
+        index = random.randint(0,29)
         team = TeamDetail.objects.get(team=request.user)
-        team.product = "test"
+        team.product = product_list[index]
         team.isProductAllocated = True
         team.save()
         return redirect('home')

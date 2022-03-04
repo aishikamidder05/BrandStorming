@@ -5,8 +5,8 @@
 <head>
   <title>BrandStorming</title>
   <meta charset="UTF-8" />
-  <meta name="description" content="Inquest is the online treasure hunt of the official techno-management fest of National
-    Institute of Technology, Durgapur organised by Centre for Cognitive Activities(CCA)" />
+  <meta name="description" content="Brandstorming is an online event of the official techno-management fest of National
+    Institute of Technology, Durgapur organised by Team Aavishkar." />
 
   <meta name="keywords" content="aarohan, 2020, 2k20, nit, nitd, nitdgp, official techno-management fest,
     fest, festival, science, engineering, techno-management, durgapur, National Institute of Technology, Durgapur,
@@ -84,6 +84,12 @@
     </div>
   </nav>
 
+  <div class="logo-mobile">
+    <a href="../">
+      <img src="{% static "img/final-logo.png" %}" style="width:100px" />
+    </a>
+  </div>
+
   <div class="container text-center">
     <div class="inq-logo">
       <h1>Brand Storming</h1>
@@ -92,7 +98,7 @@
   </div>
   {%if team.isProductAllocated %}
     <div class="alert alert-success mx-auto" style="width: 400px;text-align: center; font-size: 16px;">
-      Your alloted product is - {{team.product}}
+      Your alloted product is - <b>{{team.product}}</b>
     </div>
   {% else %}
     
