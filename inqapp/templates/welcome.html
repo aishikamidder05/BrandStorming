@@ -1,8 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 
 <head>
-  <title>Inquest 2020</title>
+  <title>BrandStorming</title>
   <meta charset="UTF-8" />
   <meta name="description" content="Inquest is the online treasure hunt of the official techno-management fest of National
     Institute of Technology, Durgapur organised by Centre for Cognitive Activities(CCA)" />
@@ -21,19 +22,9 @@
   <link rel="canonical" href="https://arhn.co.in" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-<script>
-  var OneSignal = window.OneSignal || [];
-  OneSignal.push(function() {
-    OneSignal.init({
-      appId: "5cc55361-23b3-42f3-a60f-d0f0729342ed",
-    });
-  });
-</script>
-
-  {% load static %}
+  
 {#  <link rel="icon" type="image/png" href="{% static "img/Aarohan-Tab-Logo" %}" />#}
-    <link rel="icon" type="image/png" href="{% static "img/NEW-CCA-Logo.png" %}"/>
+    <link rel="icon" type="image/png" href="{% static "img/final-logo.png" %}"/>
   <link rel="stylesheet" type="text/css" href="{% static "vendor/bootstrap/css/bootstrap.min.css" %}" />
   <link rel="stylesheet" type="text/css" href="{% static "fonts/font-awesome-4.7.0/css/font-awesome.min.css" %}" />
   <link rel="stylesheet" type="text/css" href="{% static "fonts/iconic/css/material-design-iconic-font.min.css" %}" />
@@ -64,21 +55,20 @@
 
   <!-- navbar -->
   <nav class="nav">
-    <div class="container" id="nav-cont">
+    <div class="container-fluid" id="nav-cont">
       <div class="logo">
         <a href="../">
-          <img src="{% static "img/NEW-CCA-Logo_Colored.png" %}" style="width:100px" />
-          <img src="{% static "img/WDCT_logo_white.png" %}" style="width:100px" />
+          <img src="{% static "img/final-logo.png" %}" style="width:100px" />
         </a>
       </div>
       <div id="mainListDiv" class="main_list">
         <ul class="navlinks">
           <li><a href="../">Home</a></li>
-          <li><a href="{% url 'leaderboard' %}">Leaderboard</a></li>
           <li><a href="{% url 'contact' %}">Contact Us</a></li>
           {% if user.is_authenticated %}
+          <li><a href="{% url 'team-detail' %}">My Team</a></li>
           <li><a href="{% url 'logout' %}">Logout</a></li>
-          <li><a href="../"> Hi {{ user.name }} !</a></li>
+          <li><a href="../"> Hi {{ user.username }} !</a></li>
           {% else %}
           <li><a href="{% url 'signin' %}">Login</a></li>
           <li><a href="{% url 'signup' %}">Sign Up</a></li>
@@ -93,77 +83,81 @@
     </div>
   </nav>
 
-  <div class="container cont">
+  <div class="container text-center">
     <div class="inq-logo">
-      <img src="{% static "img/Inquest.png" %}" alt="inquest">
+      <h1>Brand Storming</h1>
     </div>
     <div class="row infobar">
-      {% if started == False %}
-      <div class="col-lg-12 info_el timer">
-        <span class="game_start">Game Starts on</span>
-        <br />
-        <h1 class="timer_out"> {{starttime}} </h1>
-      </div>
-      {% else %}
-      <div class="col-lg-12 info_el timer">
-        <span class="game_start">{{message}}</span>
-      </div>
+      {% if user.is_authenticated %}
+        {%if team.isTeamAdded %}
+          {%if team.isProductAllocated %}
+            <div class="alert alert-success mx-auto" style="width: 400px;text-align: center; font-size: 16px;">
+              Your alloted product is - {{team.product}}
+            </div>
+          {% else %}
+            <div style="width: 100%;text-align: center; padding-bottom: 5vh;">
+              <button class="btn btn-success boton"
+                style="padding:0.7rem 2rem;border:0;margin-top:3vh;min-width: 9vw;background: linear-gradient(90deg, rgb(111, 158, 65) 0%, rgb(73, 111, 23) 100%);">
+                <a href="{% url 'product' %}" style="text-decoration: none;
+                  color: white;">
+                  <h3 style="margin:0;font-size: 1.5em;">PROCEED</h3>
+                </a>
+              </button>
+            </div>
+          {% endif %}
+        {%else%}
+          <div class="alert alert-danger mx-auto" role="alert" style="width: 400px;text-align: center; font-size: 14px;">
+            Please update your team first!
+          </div>
+        {% endif %}
       {% endif %}
-      <div style="width: 100%;text-align: center; padding-bottom: 5vh;">
-        <button class="btn btn-success boton"
-          style="padding:0.7rem 2rem;border:0;margin-top:3vh;min-width: 9vw;background: linear-gradient(90deg, rgb(111, 158, 65) 0%, rgb(73, 111, 23) 100%);">
-          <a href="{% url 'inquest' %}" style="    text-decoration: none;
-      color: white;">
-            <h3 style="margin:0;font-size: 1.5em;">PLAY</h3>
-          </a>
-
-        </button>
-      </div>
 
     </div>
-    <div class="row main_blocks">
-      <div class="row block_rw">
-        <div class="col block">
-          <h1 class="bl_header">
-            Inquest?
-          </h1>
 
-          <p class="bl_text">
-            <!-- Inquest is an online treasure hunt as a part
-            of Aarohan 2020. -->
-            Inquest is an online treasure hunt organised by CCA every year.
-          </p>
-        </div>
-        <div class="col block">
-          <h1 class="bl_header">
-            Rules
-          </h1>
+  </div>
+  <div class="limiter" style="margin-top: -50px;">
+    <div class="container-login100">
+      <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54" style="width: 550px;">
+        <span class="login100-form-title p-b-49">
+          Rules
+        </span>
+        <div>
+          <ul>
+            <li> 1) A team can have 1-3 members. </li>
+            <li> 1) One of the team member needs to sign up and can share the username and password with his/her teammates. </li>
+            <li> 3) After sign up you need to update the team details in "My Team" section.</li>
+            <li> 4) Once you update your team details then you can take the product allotment quiz available on the home screen. </li>
+            <li> 2) Product will be assigned to each team on day 1. </li>
+            <li> 3) 24 hrs will be assigned for advertisement preparation. </li>
+            <li> 4) Each team will get 1 minute for presenting. </li>
+            <li> 5) The decision of the organizing committee would be final. </li>
+          </ul>
+          <span class="login100-form-title p-b-49">
+            Guidelines for Presentation
+          </span>
+          <ul>
+            <li> 1) Each team has to create an aesthetic presentation on the assigned product. </li></br>
+            <li> 2) The presentation must include the following:
+                <ol>
+                  <li>i) Logo</li>
+                  <li>ii) Brand Design</li>
+                  <li>iii) Product features (Atleast 3)<li>
+                  <li>iv) Target Audience</li> 
+                  <li>v) Product overview</li>
+                </ol>
+            </li></br>
+            <li> 3) Use of any online resources like Canva, sketches, etc is allowed but the idea needs to be unique. </li></br>
 
-          <p class="bl_text">
-            Revealing answers or questions on any social media will result in
-            immediate disqualification. Contact Event Heads for queries.
-          </p>
-        </div>
-      </div>
-      <div class="row block_rw">
-        <div class="col block">
-          <h1 class="bl_header">
-            Instructions
-          </h1>
-
-          <p class="bl_text">
-            You have unlimited attempts for every level. You won't be judged
-            by the number of attempts you make. Googling is the key to success.
-          </p>
-        </div>
-        <div class="col block">
-          <h1 class="bl_header">
-            What if I win?
-          </h1>
-
-          <p class="bl_text">
-            Exciting Prizes and Goodies for top three players.
-          </p>
+            <li>4) Additionally the following may also be included:
+              <ol>
+                <li>i) Differentiating feature of the product. </li>
+                <li>ii) Scope of the product. </li>
+                <li>iii) User Journey Analysis  </li>
+                <li>iv) Simple Web portal as a demo </li>
+              </ol>
+            <li></br>
+            <li>5) Hand drawn or self designed creative inputs will add some browny points for evaluation.</li></>
+          </ul>
         </div>
       </div>
     </div>

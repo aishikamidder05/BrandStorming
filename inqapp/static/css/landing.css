@@ -1,3 +1,8 @@
+@font-face {
+  font-family: Poppins-Bold;
+  src: url("../fonts/poppins/Poppins-Bold.ttf");
+}
+
 body {
   overflow-x: hidden;
 }
@@ -11,14 +16,25 @@ body {
 }
 
 /*welcome*/
-.inq-logo {
-  padding-top: 5vh;
+@keyframes bounce {
+  0%{
+    transform: translateY(0px);
+  }
+  100%{
+    transform: translateY(-8px);
+  }
 }
 
-.inq-logo img {
-  width: 60%;
-  margin-left: 20%;
+.inq-logo h1 {
+  font-family: Poppins-Bold !important;
+  font-size: 6rem;
+  letter-spacing: 0.5rem;
+  color: #fff !important;
+  font-weight: bold !important;
+  margin-top: 150px;
+  animation: bounce 0.8s ease-in-out alternate-reverse infinite;
 }
+
 
 .block {
   background-color: #ededed;
@@ -66,22 +82,19 @@ body {
   line-height: 1.5rem;
 }
 
-@media only screen and (min-width: 768px) {
-  .game_start {
-    line-height: 0.8;
-  }
+@media (max-width: 768px) {
 
-  /* .infobar {
-    margin-top: 50px;
-  } */
+  .inq-logo h1 {
+    font-size: 3rem;
+    letter-spacing: 0.1;
+  }
 }
 
-@media only screen and (max-width: 600px) {
-  .inq-logo img {
-    width: 100%;
-    margin-left: 0;
+@media (max-width: 600px) {
+  .inq-logo h1 {
+    font-size: 3rem;
+    letter-spacing: 0.1;
   }
-
   .bl_text {
     color: black;
     font-size: 1.1rem;
@@ -109,7 +122,4 @@ body {
     justify-content: center;
   }
 
-  .game_start {
-    font-size: 2rem;
-  }
 }

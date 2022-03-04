@@ -1,194 +1,175 @@
 from django.shortcuts import render
-from .models import Question,CustomUser,Event
+from .models import Question , Event, TeamDetail
+from .forms import TeamForm
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse_lazy
-from django.views import generic
+from django.views import  View
 from django.shortcuts import render, get_object_or_404,render
-from .forms import CustomUserCreationForm,ReplyForm,SignUpForm
 from django.shortcuts import redirect
 from django.http import HttpResponse,JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
-
+from django.conf import settings
 from django.utils import timezone
 import datetime
+import requests
 from django.utils.timezone import utc
 
-# for email activation link
-# from django.contrib.sites.shortcuts import get_current_site
-# from django.utils.encoding import force_bytes
-# from django.utils.http import urlsafe_base64_encode
-# from django.template.loader import render_to_string
-# from .forms import SignUpForm
-# from .tokens import account_activation_token
-# from django.core.mail import send_mail
-# from django.utils.encoding import force_text
-# from inquest import settings as sett
-# from django.utils.http import urlsafe_base64_decode
+def home(request):
+    if request.user.is_anonymous:
+       return render(request,'welcome.html',{})
+    else: 
+        if TeamDetail.objects.filter(team=request.user).exists():
+            team = TeamDetail.objects.get(team=request.user)
+            return render(request,'welcome.html',{"team":team})
+        return render(request,'welcome.html',{'team': 'none'})
 
+class TeamDetailView(View):
+    def get(self, request):
+        if self.request.user.is_anonymous:
+            return redirect('home')
+        else:
+            if TeamDetail.objects.filter(team=request.user).exists():
+                team = TeamDetail.objects.get(team=request.user)
+                return render(request, 'teamDetail.html', {'team': team, 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+            return render(request, 'teamDetail.html', {'team': 'none', 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
 
+    def post(self, request):
+        form =TeamForm(request.POST)
 
+        recaptcha_response = request.POST['g-recaptcha-response']
+        data = {
+            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
+        print(result)
 
+        if result['success']:
+            if form.is_valid():
+                instance = form.save(commit=False)
+                instance.team = self.request.user
+                instance.isTeamAdded = True
+                instance.save()
+                team = TeamDetail.objects.get(team=request.user)
+                message = "Team updated successfully"
+                return render(request, 'teamDetail.html', {'message': message, 'team': team, 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+            
+            else:
+                message = "Could not update. Please try again."
+                return render(request, 'teamDetail.html', {'message': message, 'team':'none', 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
 
-
+        else:
+            message = "Could not update. Please try again."
+            return render(request, 'teamDetail.html', {'message': message, 'team':'none', 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+                
 
 def question(request):
-    event=Event.objects.get(id=1)
-    timenow=timezone.now()
-    eventtime = event.event_start
-    eventend = event.event_end
-    if (timenow>eventend):
-        message="Thank you all!"
-        #print(message)
-        return render(request,'welcome.html',{'message':message})
+    if request.user.is_anonymous:
+       return redirect('home')
+    if TeamDetail.objects.filter(team=request.user).exists():
+        questions = Question.objects.all()
+        team = TeamDetail.objects.get(team=request.user)
+        return render(request,'question.html', {'questions':questions, 'team':team})
     else:
-        if timenow>eventtime and timenow<eventend:
-            if request.user.is_anonymous:
-                return redirect('../signup/')
-            t=int(request.user.id)
-            user=CustomUser.objects.get(id=t)
-            #print("Done")
-            if request.method == "POST":
-                #print("Done")
-                score=(request.user.score)
-                question = get_object_or_404(Question, pk=str((user.score)+1))
-                user_answer=request.POST.get('answer')
-                flag=0
-                ans=str(user_answer)
-                ans=ans.lower()
-                ans=ans.replace(" ","")
-                if(str(ans)==str(question.answer)):
-                    user.score+=1
-                    timenow=timezone.now()
-                    user.last_updated=timenow
-                    user.save()
-                    user.publish()
-                    flag=1
-                if flag==0:
-                    form=ReplyForm()
-                    score=user.score
-                    question = get_object_or_404(Question, pk=str((user.score)+1))
-                    n=score
-                    flash="Try Harder"
-                    level=int(user.score)+1
-                    return render(request,'question.html',{'question': question,'form':form,'n':n,'flash':flash,'level':level})
-                else:
-                    form=ReplyForm()
-                    score=user.score
-                    question = get_object_or_404(Question, pk=str((user.score)+1))
-                    n=score
-                    flash="Correct Answer"
-                    level=int(user.score)+1
-                    return render(request,'question.html',{'question': question,'form':form,'n':n,'flash':flash,'level':level})
-            else:
-                level=int(user.score)+1
-                form=ReplyForm()
-                score=user.score
-                question = get_object_or_404(Question, pk=str((user.score)+1))
-                n=score
-                return render(request,'question.html',{'question': question,'form':form,'n':n,'level':level})
-        else:
-            return redirect('home')
-
-
-def home(request):
-    timenow = timezone.now() 
-    event=Event.objects.get(id=1)
-    eventtime=(event.event_start)
-    eventend=(event.event_end)
-    timeleft=eventtime-timenow
-    timeleft=timeleft.total_seconds()   #  timeleft in seconds
-    timeleft=int(timeleft)
-    if timenow < eventtime:
-        #pass timeleft
-        # message="welcome the game will start soon "
-        timeleft = (eventtime-timenow).total_seconds()
-        timeleft =int(timeleft)
-        print(eventtime)
-        started = False
-        return render(request,'timer.html',{'started':started,'starttime':eventtime.strftime("%Y/%m/%d %H:%M:%S")})
-    elif timenow>eventtime and timenow<eventend:
-        #game is live
-        timeleft = eventend-timenow
-        print(timeleft)
-        message="Game is Live!"
-        started = True
-        return render(request,'welcome.html',{'message':message,'started':started})
-    else:
-        message="Thank you all!"
-        return render(request,'welcome.html',{'message':message,'started':True})
-
-
-# def test(request):
-#     t=int(request.user.id)
-#     user=CustomUser.objects.get(id=t)
-#     score=user.score
-#     return HttpResponse(str(score)+" "+str(CustomUser.objects.filter(score__gt=score).count()))
-
-
-def leaderboard(request):
-    participants = CustomUser.objects.filter().order_by('-score','last_updated')
-    return render(request, 'leaderboard.html', {'participants': participants},)
-
-def profile(request):
-    return render(request,'temp.html')
+        return redirect('home')
 
 def contact(request):
     return render(request,'contact.html')
 
-def logoutred(request):
-    return render(request, 'registration/login.html', {})
-
-def signup(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.is_active = False
-            if request.user.is_anonymous:
-                user.save()
-                user.is_active = True
-                user.last_updated = timezone.now()
-                user.email=form.cleaned_data['username']
-                user.save()
-                new_user = authenticate(username=form.cleaned_data['username'],
-                                        password=form.cleaned_data['password1'],
-                                        )
-                login(request, new_user)
-                message="Logged In !"
-                return render(request,'welcome.html',{'message':message})
-            else:
-                message="You are logged in already"
-                return render(request,'welcome.html',{'message':message})
-        else:
-            message="The email is already registered."
-            return render(request,'signup.html',{'message':message})
+def productAllot(request):
+    if request.user.is_anonymous:
+       return redirect('home')
+    if TeamDetail.objects.filter(team=request.user).exists():
+        team = TeamDetail.objects.get(team=request.user)
+        team.product = "test"
+        team.isProductAllocated = True
+        team.save()
+        return redirect('home')
     else:
-        form = SignUpForm()
-        return render(request, 'signup.html', {'form': form})
-
-def signin(request):
-    if request.method == 'POST':
-        username = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(username=username, password=password)
-        if user:
-            if user.is_active:
-                login(request,user)
-                return redirect('home')
-            else:
-                return HttpResponse("Your account was inactive. Contact Admin")
-        else:
-            print("Someone tried to login and failed.")
-            print("They used username: {} and password: {}".format(username,password))
-            message="Invalid login details!"
-            return render(request,'registration/login.html',{'message':message})
-    else:
-
-        #args={'user':user}
-        #return render(request,'registration/login.html',args)
-        return render(request,'registration/login.html',{})
+        return redirect('home')
 
 def noPage(request):
     return render(request,'404.html')
+
+class RegistrationView(View):
+    def get(self, request):
+        return render(request, 'signup.html', {'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+
+    def post(self, request):
+
+        username = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        recaptcha_response = request.POST['g-recaptcha-response']
+        data = {
+            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
+        print(result)
+
+        if result['success']:
+            if username and email and password:
+                if not User.objects.filter(username=username).exists():
+                    if not User.objects.filter(email=email).exists():
+                        if len(password) < 6:
+                            message = 'Password too short'
+                            return render(request, 'signup.html', {'message':message,'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+
+                        user = User.objects.create_user(username=username, email=email)
+                        user.set_password(password)
+                        user.save()
+                        message = "Account successfully created"
+                        return render(request, 'registration/login.html', {'message':message, 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+                
+                message = 'User already exists'
+                return render(request,  'signup.html', {'message':message, 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+            message = 'Fill all the Fields'
+            return render(request, 'signup.html', {'message':message, 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+
+        message = 'Could not register. Please try again'
+        return render(request, 'signup.html', {'message':message, 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+        
+
+
+class LoginView(View):
+    def get(self, request):
+        return render(request,'registration/login.html',{'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+
+    def post(self, request):
+        username = request.POST['username']
+        password = request.POST['password']
+        recaptcha_response = request.POST['g-recaptcha-response']
+        data = {
+            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
+            'response': recaptcha_response
+        }
+        r = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result = r.json()
+        print(result)
+
+        if result['success']:
+
+            if username and password:
+                user = authenticate(username=username, password=password)
+
+                if user:
+                    login(request, user)
+                    return redirect('home')
+
+                message = 'Invalid Credentials'
+                return render(request, 'registration/login.html', {'message':message, 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+
+            message = 'Fill all the fields'
+            return render(request, 'registration/login.html', {'message':message, 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+
+        message = 'Could not login. Please try again'
+        return render(request, 'registration/login.html', {'message':message, 'recaptcha_site_key':settings.GOOGLE_RECAPTCHA_SITE_KEY})
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect('login')

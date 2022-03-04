@@ -1,28 +1,17 @@
 from django.urls import path
 from django.conf.urls import url,include
 from inqapp import views
-from django.views.generic.base import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('signup/', views.signup, name='signup'),
-    path('signin/', views.signin, name='signin'),
-    #url(r'^question/(?P<pk>\d+)/$', views.question, name='question'),
-    path('leaderboard/', views.leaderboard,name='leaderboard'),
-    #path('test', TemplateView.as_view(template_name='question.html'), name='test'),
-    #path('test',views.test,name='test'),
+    path('signup/', views.RegistrationView.as_view(), name='signup'),
+    path('signin/', views.LoginView.as_view(), name='signin'),
+    path('logout/', views.LogoutView.as_view(),name='logout'),
     path('contact-us/',views.contact,name='contact'),
+    path('team-detail/',views.TeamDetailView.as_view(),name='team-detail'),
     path('', views.home,name='home'),
-    #path('test', TemplateView.as_view(template_name='question.html'), name='test'),
-    #path('test', views.test,name='test'),
-    path('inquest/', views.question,name='inquest'),
-    path('logout/',views.logoutred,name='logout'),
-    path('profile/',views.profile,name='profile'),
-    path('accounts/profile/',views.profile,name='profile'),
-    url(r'^login/$', views.login, name='login'),
-    url(r'^logout/$', views.logout, name='logout'),
-    url(r'^auth/', include('social_django.urls', namespace='social')),
+    path('product/', views.question,name='product'),    
+    path('product-allot/', views.productAllot,name='product-allot'),    
     url('nopage',views.noPage, name="404")
-    #url(r'^(?P<string>[ \w\-]+)/$',views.question, name=''),
 ]+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

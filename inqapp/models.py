@@ -1,33 +1,33 @@
 from django.db import models
-import os
 from django.contrib.auth.models import User
-from django.dispatch import receiver
-from django.contrib.auth.models import AbstractUser
-from datetime import datetime
 
 
-def default_score():
-    return 0
-
-
-class CustomUser(AbstractUser):
-    user_name = models.EmailField(blank=False, max_length=80)
-    name = models.CharField(blank=False, max_length=50)
-    score=models.IntegerField(default=default_score())
-    college=models.CharField(max_length=100,blank=False,null=False)
-    mobile = models.CharField(blank=False,max_length=10)
-    last_updated = models.DateTimeField(auto_now_add=False,null=True)
+class TeamDetail(models.Model):
+    team = models.OneToOneField(User, on_delete= models.CASCADE, null=True)
+    leader_name = models.CharField(blank=False, max_length=100)
+    leader_email = models.EmailField(blank=False, max_length=80)
+    leader_mobile = models.CharField(blank=False,max_length=10)
+    member2_name = models.CharField(blank=True, max_length=100)
+    member2_email = models.EmailField(blank=True, max_length=80)
+    member3_name = models.CharField(blank=True, max_length=100)
+    member3_email = models.EmailField(blank=True, max_length=80)
+    isTeamAdded = models.BooleanField(default=False)
+    isQuizTaken = models.BooleanField(default=False)
+    isProductAllocated = models.BooleanField(default=False)
+    product = models.CharField(max_length=100, blank=True, null=True )
     def __str__(self):
-        return self.name
+        return self.team.username
+    
     def publish(self):
         self.save()
 
+
 class Question(models.Model):
     question=models.CharField(max_length=300,blank=True)
-    image=models.ImageField(upload_to='images/',help_text='Please upload an image',blank=True)
-    answer=models.CharField(max_length=50,blank=False)
-    message=models.CharField(max_length=300,blank=True)
-    audio_question=models.FileField(upload_to='audio/',blank=True) #use .mp3 only
+    option1=models.ImageField(upload_to='images/',blank=True, null=True)
+    option2=models.ImageField(upload_to='images/',blank=True, null=True)
+    option3=models.ImageField(upload_to='images/',blank=True, null=True)
+    option4=models.ImageField(upload_to='images/',blank=True, null=True)
     def publish(self):
         self.save()
 
@@ -36,6 +36,6 @@ class Question(models.Model):
 
 
 class Event(models.Model):
-    Event_name=models.CharField(default="inquest",max_length=50,blank=False)
+    Event_name=models.CharField(default="BrandStorming",max_length=50,blank=False)
     event_start=models.DateTimeField(auto_now_add=False)
     event_end=models.DateTimeField(auto_now_add=False)

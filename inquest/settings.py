@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+GOOGLE_RECAPTCHA_SITE_KEY = '6Lfed7EeAAAAAI0I_JbftoIi4-bmxBrDTaPaCLVh'
+
+GOOGLE_RECAPTCHA_SECRET_KEY = '6Lfed7EeAAAAAF7GEjSvSXuOBn8pwZ5Bt-YtYkF8'
+
 
 # Application definition
 
@@ -40,10 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_cleanup.apps.CleanupConfig', # to delete media files after deleting from admin panel
-    # 'social_django' ,
 ]
-
-AUTH_USER_MODEL = 'inqapp.CustomUser'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -76,11 +77,7 @@ TEMPLATES = [
 ]
 
 
-AUTHENTICATION_BACKENDS = (
- 'social_core.backends.open_id.OpenIdAuth',  # for Google authentication
- 'social_core.backends.google.GoogleOpenId',  # for Google authentication
- 'social_core.backends.google.GoogleOAuth2',  # for Google authentication
- 
+AUTHENTICATION_BACKENDS = ( 
  'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -88,11 +85,6 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'home'
 
 LOGOUT_REDIRECT_URL = 'home'
-
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY =''  #Paste CLient Key
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '' #Paste Secret Key
-
 
 
 
@@ -142,6 +134,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
