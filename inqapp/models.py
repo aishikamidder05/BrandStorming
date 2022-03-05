@@ -14,7 +14,7 @@ class TeamDetail(models.Model):
     isTeamAdded = models.BooleanField(default=False)
     isQuizTaken = models.BooleanField(default=False)
     isProductAllocated = models.BooleanField(default=False)
-    product = models.CharField(max_length=100, blank=True, null=True )
+    product = models.CharField(max_length=500, blank=True, null=True )
     def __str__(self):
         return self.team.username
     
@@ -23,7 +23,7 @@ class TeamDetail(models.Model):
 
 
 class Question(models.Model):
-    question=models.CharField(max_length=300,blank=True)
+    question=models.CharField(max_length=500,blank=True)
     option1=models.ImageField(upload_to='images/',blank=True, null=True)
     option2=models.ImageField(upload_to='images/',blank=True, null=True)
     option3=models.ImageField(upload_to='images/',blank=True, null=True)
