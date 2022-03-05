@@ -31,7 +31,8 @@ body {
   letter-spacing: 0.5rem;
   color: #fff !important;
   font-weight: bold !important;
-  margin-top: 150px;
+  margin-top: 100px;
+  margin-bottom: 20px;
   animation: bounce 0.8s ease-in-out alternate-reverse infinite;
 }
 
@@ -82,20 +83,26 @@ body {
   line-height: 1.5rem;
 }
 
+.prize-text {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
 @media (max-width: 768px) {
 
   .inq-logo h1 {
-    font-size: 3rem;
-    letter-spacing: 0.1;
-    margin-top: 100px;
+    font-size: 4rem;
+    letter-spacing: 0.05;
+    margin-top: 50px;
   }
 }
 
 @media (max-width: 600px) {
   .inq-logo h1 {
-    font-size: 3rem;
-    letter-spacing: 0.1;
-    margin-top: 100px;
+    font-size: 4rem;
+    letter-spacing: 0.05;
+    margin-top: 50px;
   }
   .bl_text {
     color: black;
