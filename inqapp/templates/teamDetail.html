@@ -99,6 +99,33 @@
               <li> 3rd Member : {{team.member3_name}}</li> <br />
               <li> 3rd Member Email : {{team.member3_email}}</li> <br />
               <li> Product Alloted : {{team.product}}</li> <br />
+              {% if team.isProductAllocated %}
+                {% if team.submission %}
+                  <li>
+                    Submission Status : <span class="text-success">Done</span>
+                  </li>
+                {%else%}
+                  <li>
+                    <form class="login100-form validate-form" action="{% url 'submission' %}" method="post">{% csrf_token %}
+                      <div class="wrap-input100 validate-input m-b-23" data-validate="E-mail is required">
+                        <span class="label-input100">Presentation Link</span>
+                        <input class="input100" type="text" name="submission" placeholder="Enter your Presentation Link" />
+                        <span class="focus-input100" data-symbol="&#xf206;"></span>
+                      </div>
+                      <p><b>Note :</b> Upload your presentation on google drive and share the <b>public url here.</b></p>
+                      <div class="container-login100-form-btn">
+                        <div class="wrap-login100-form-btn">
+                          <div class="login100-form-bgbtn"></div>
+                          <button class="login100-form-btn" type="submit" 
+                            style="background: linear-gradient(90deg, rgb(111, 158, 65) 0%, rgb(73, 111, 23) 100%);">
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </li>
+                {%endif%}
+              {%endif%}
             </ul>
           </div>
 

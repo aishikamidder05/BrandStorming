@@ -15,6 +15,7 @@ class TeamDetail(models.Model):
     isQuizTaken = models.BooleanField(default=False)
     isProductAllocated = models.BooleanField(default=False)
     product = models.CharField(max_length=500, blank=True, null=True )
+    submission = models.CharField(max_length=500, blank=True, null=True)
     def __str__(self):
         return self.team.username
     

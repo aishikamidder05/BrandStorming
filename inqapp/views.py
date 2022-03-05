@@ -125,6 +125,17 @@ def productAllot(request):
     else:
         return redirect('home')
 
+def submission(request):
+    if request.user.is_anonymous:
+       return redirect('signin')
+    if TeamDetail.objects.filter(team=request.user).exists():
+        team = TeamDetail.objects.get(team=request.user)
+        team.submission =  request.POST['submission']
+        team.save()
+        return redirect('team-detail')
+    else:
+        return redirect('team-detail')
+
 def noPage(request):
     return render(request,'404.html')
 
